@@ -19,3 +19,7 @@ body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+.btn-primary {
+  @apply bg-black text-white text-2xl text-center w-full max-w-56 p-2 rounded-full;
+}
