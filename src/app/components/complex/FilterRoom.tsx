@@ -1,53 +1,50 @@
 'use client';
-import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import useSelectedRooms from '@/app/hooks/useSelectedRooms';
+import toggleRoom from '@/app/service/toggleRoom';
+import { SlArrowDown } from 'react-icons/sl';
 
 export default function FilterRoom() {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
-  const searchParams = useSearchParams();
+  // We pass router to toggleRoom, rule of hooks n all that jazz
   const router = useRouter();
-
-  // Convert existing search params into an object
-  const getSelectedRooms = () => {
-    const rooms = searchParams.get('rooms');
-    return rooms ? rooms.split(',') : [];
-  };
-
-  const selectedRooms = getSelectedRooms();
-
-  const toggleRoom = (room: string) => {
-    const updatedRooms = selectedRooms.includes(room)
-      ? selectedRooms.filter((r) => r !== room) // Remove room
-      : [...selectedRooms, room]; // Add room
-
-    // Update the URL with new room filters
-    const params = new URLSearchParams();
-    if (updatedRooms.length > 0) {
-      params.set('rooms', updatedRooms.join(','));
-    }
-
-    router.push(`?${params.toString()}`, undefined);
-  };
+  const selectedRooms = useSelectedRooms();
 
   return (
-    <div className="relative">
-      <button
-        className="p-2 border border-gray-400 rounded-full min-w-36"
-        onClick={() => setIsMenuOpen((prev) => !prev)}
-      >
-        Välj rum
-      </button>
+    <div className="relative mt-4">
+      <div onClick={() => setIsMenuOpen((prev) => !prev)}>
+        <button className="relative p-2 border border-gray-400 rounded-full w-1/2">
+          {selectedRooms.length ? (
+            `${selectedRooms.length} valda rum`
+          ) : (
+            <>
+              <p>Mötesrum</p>
+            </>
+          )}
+        </button>
+        <SlArrowDown
+          className={`absolute top-3 left-[calc(50%-2em)] ${
+            isMenuOpen ? 'rotate-180' : 'rotate-0'
+          }`}
+        />
+      </div>
 
       {isMenuOpen && (
         <div className="absolute top-12 w-full flex flex-col bg-white border border-gray-400 rounded-lg p-4">
-          {['Margret', 'Steve', 'Ada', 'Edmund', 'Grace'].map((room) => (
+          {[
+            'Margret (4)',
+            'Steve (6)',
+            'Ada (10)',
+            'Edmund (10)',
+            'Grace (20)',
+          ].map((room) => (
             <label className="flex justify-between" key={room}>
               {room}
               <input
                 type="checkbox"
                 checked={selectedRooms.includes(room)}
-                onChange={() => toggleRoom(room)}
+                onChange={() => toggleRoom(room, selectedRooms, router)}
               />
             </label>
           ))}

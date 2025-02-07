@@ -16,10 +16,7 @@ export default function Button({ setError, chosenSlotId }: ButtonProps) {
 
   return (
     <>
-      <button
-        onClick={handleClick}
-        className="bg-black text-white text-lg text-center p-2 rounded-full w-full"
-      >
+      <button onClick={handleClick} className="button">
         Boka
       </button>
     </>

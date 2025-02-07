@@ -1,35 +1,32 @@
 'use client';
-import { useSearchParams } from 'next/navigation';
-
-export const Form = () => {
-  return (
-    <>
-      <h1 className="text-3xl">Vem bokar?</h1>
-      <form className="flex flex-col">
-        <label className="text-gray-500">Förnamn & Efternamn</label>
-        <input className="border border-gray-200 rounded-lg p-1"></input>
-      </form>
-    </>
-  );
-};
+import { useState } from 'react';
+import { LiaSadTearSolid } from 'react-icons/lia';
+import { Popup } from '../components/popup/Popup';
+import { IoHappySharp } from 'react-icons/io5';
+import { HeaderText } from '../components/basic/BasicUI';
+import Form from '../components/complex/Form';
 
 export default function Confirm() {
-  const searchParams = useSearchParams();
-  const id = searchParams.get('slotId');
-
-  const clickHandler = () => {
-    //addBooking();
-  };
+  const [showPopup, setShowPopup] = useState<boolean>(false);
+  const [state, setState] = useState<{ success: string; msg: string }>({
+    success: '',
+    msg: '',
+  });
 
   return (
-    <div>
-      <Form />
-      <button
-        className="bg-black rounded-full p-2 w-full text-white"
-        onClick={clickHandler}
-      >
-        Boka
-      </button>
-    </div>
+    <section className="flex-grow flex flex-col justify-between w-full p-4 space-y-4">
+      {showPopup &&
+        (state.success ? (
+          <Popup msg={state.msg} setError={setShowPopup} Icon={IoHappySharp} />
+        ) : (
+          <Popup
+            msg={state.msg}
+            setError={setShowPopup}
+            Icon={LiaSadTearSolid}
+          />
+        ))}
+      <HeaderText text="Vem bokar?" />
+      <Form setShowPopup={setShowPopup} setState={setState} />
+    </section>
   );
 }

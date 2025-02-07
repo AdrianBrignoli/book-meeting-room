@@ -20,6 +20,38 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-.btn-primary {
-  @apply bg-black text-white text-2xl text-center w-full max-w-56 p-2 rounded-full;
+.button {
+  background-color: black;
+  color: white;
+  font-size: 1.5rem; 
+  text-align: center;
+  width: 100%;
+  max-width: 30rem; 
+  padding: 0.5rem; 
+  border-radius: 9999px; 
+  margin: 0 auto;
+}
+
+.spinner {
+  width: 100px; 
+  height: 100px; 
+  border: 2px solid rgb(0, 0, 0); 
+  border-top: 2px solid rgba(157, 157, 157, 0); 
+  border-radius: 50%; 
+  animation: spin 1s linear infinite;
+  position: fixed;
+  top: 50%;
+  left: calc(50% - 50px); 
+  transform: translateY(-50%);
+  box-sizing: border-box; 
+  transform-origin: center; 
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg); /* Starting point */
+  }
+  100% {
+    transform: rotate(360deg); /* Full circle rotation */
+  }
 }

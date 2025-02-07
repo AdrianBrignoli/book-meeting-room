@@ -2,13 +2,14 @@
 import CustomCalender from '../complex/CustomCalendar';
 import FilterRoom from '../complex/FilterRoom';
 import Button from '../basic/Button';
-import { PopupError } from '../popups/Popups';
+import { Popup } from '../popup/Popup';
 import { useState } from 'react';
-import { BookingEvent } from '@/types/types';
-import BookingEventCard from '../basic/BookingEventCard';
 import { bakeSlots } from '@/app/utils/utils';
+import { BookDynamicProps } from '@/types/types';
+import SlotCard from '../basic/SlotCard';
+import { LiaSadTearSolid } from 'react-icons/lia';
 
-export default function BookDynamic() {
+export default function BookDynamic({ slotData }: BookDynamicProps) {
   const [error, setError] = useState<boolean>(false);
   const [chosenSlotId, setChosenSlotId] = useState<number | undefined>(
     undefined
@@ -16,9 +17,10 @@ export default function BookDynamic() {
 
   return (
     <>
-      {/* Filtering through query params should suffice, good for sharing the link between coleagues */}
+      {/* Filtering through query params should suffice, good for sharing the link between colleagues */}
       <FilterRoom />
-      <CustomCalender>
+      {/* Let's render the cards as children, might wanna change out the UI for different purpose */}
+      <CustomCalender slotData={slotData}>
         {({ preIndexContent, indexContent, postIndexContent }) => {
           const sections = bakeSlots(
             preIndexContent,
@@ -29,18 +31,19 @@ export default function BookDynamic() {
           // Let's tryna keep it DRY
           // Might wanna abstract further, too much fuzz for a main Component container
           return (
-            <div className="flex h-full">
+            <div className="flex-grow flex divide-x divide-gray-300">
               {sections.map(({ key, data, className }) => (
                 <div key={key.toString()} className={className.toString()}>
                   {data.map((c, index) => (
-                    <BookingEventCard
+                    <SlotCard
                       key={index}
-                      id={c.id}
-                      title={c.title}
+                      slotId={c.slotId}
+                      name={c.roomName}
                       capacity={c.capacity}
                       start={c.start}
                       end={c.end}
                       setChosenSlotId={setChosenSlotId}
+                      chosenSlotId={chosenSlotId}
                     />
                   ))}
                 </div>
@@ -51,9 +54,10 @@ export default function BookDynamic() {
       </CustomCalender>
       <Button setError={setError} chosenSlotId={chosenSlotId} />
       {error && (
-        <PopupError
+        <Popup
           msg="You need to select a slot in order to book it"
           setError={setError}
+          Icon={LiaSadTearSolid}
         />
       )}
     </>
