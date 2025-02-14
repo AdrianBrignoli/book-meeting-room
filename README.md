@@ -2,3 +2,4 @@
 Custom Calender component, with element cards rendered as children for reusability. 
 Implementing React 19s use hook for resolving Promises.
 My personal favorite, useActionState, used to trigger server action responsible for inserting the booking row in the DB. 
+--force needed for packages, not vibing with React 19 it seems
